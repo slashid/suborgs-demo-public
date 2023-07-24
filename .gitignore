@@ -1,0 +1,11 @@
+.venv
+.task
+slashid-openapi-latest.yaml
+__pycache__
+
+frontend/node_modules
+frontend/dist
+
+/clients
+/.openapi-generator
+/.openapi-generator-ignore
