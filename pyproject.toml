@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "suborg_demo"
+version = "0.1.0"
+description = "SlashID suborg demo"
+authors = ["slashId <hello@slashid.dev>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.99.1"
+uvicorn = "^0.21.1"
+aenum = "^3.1.15"
+urllib3 = "^2.0.3"
+python-dateutil = "^2.8.2"
+pydantic = "^1.10.5, <2"
+pyjwt = "^2.7.0"
+cryptography = "^41.0.1"
+aiohttp = "^3.8.5"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.4.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.flake8]
+max-line-length = 119
+per-file-ignores = "__init__.py:F401"
+extend-ignore = "E203"
+
+[tool.black]
+line-length = 119
+
+[tool.isort]
+src_paths = ["suborg_demo", "suborg_demo", "tests"]
+profile = "black"
+indent = 4
+combine_star = true
+combine_as_imports = true
+lines_after_imports = 2
+known_pytest = ["pytest"]
+known_asgi = ["fastapi", "starlette"]
+known_first_party = ["suborg_demo"]
+sections = ["FUTURE", "STDLIB", "PYTEST", "ASGI", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+
+[tool.mypy]
+exclude = ['.venv', 'clients']
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+show_error_codes = true
+warn_unused_ignores = true

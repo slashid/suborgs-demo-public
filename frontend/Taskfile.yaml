@@ -1,0 +1,30 @@
+# https://taskfile.dev
+
+version: "3"
+
+tasks:
+  install:
+    internal: true
+    desc: Install dependencies
+    sources:
+      - yarn.lock
+      - package.json
+    generates:
+      - node_modules/**/*
+    cmds:
+      - yarn install
+
+  start:
+    desc: Starts in dev mode
+    deps:
+      - install
+    cmds:
+      - yarn dev
+
+  build:
+    desc: Build frontend in release mode
+    deps:
+      - install
+    dir: frontend
+    cmds:
+      - yarn build

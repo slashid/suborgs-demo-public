@@ -1,0 +1,71 @@
+# https://taskfile.dev
+
+version: "3"
+
+includes:
+  frontend:
+    taskfile: ./frontend/Taskfile.yaml
+    dir: ./frontend
+
+vars:
+  PROJECT_ROOT:
+    sh: pwd
+
+tasks:
+  poetry-install:
+    internal: true
+    desc: Install project and dependencies in a venv
+    sources:
+      - pyproject.toml
+      - poetry.lock
+    cmds:
+      - poetry install
+
+  fetch-slashid-specs:
+    internal: true
+    desc: Fetches OpenAPI specs for SlashID APIs
+    generates:
+      - slashid-openapi-latest.yaml
+    cmds:
+      - wget https://cdn.sandbox.slashid.com/slashid-openapi-latest.yaml
+
+  generate-slashid-client:
+    internal: true
+    desc: Generates OpenAPI client for SlashID APIs
+    deps:
+      - fetch-slashid-specs
+    sources:
+      - slashid-openapi-latest.yaml
+    generates:
+      - clients/slashid/**/*
+    cmds:
+      - rm -rf clients
+      - defer: rm -rf .openapi-generator .openapi-generator-ignore
+      - |
+        docker run \
+        --user "$(id -u):$(id -g)" \
+        --pull=missing \
+        --rm \
+        -v {{.PROJECT_ROOT}}:/local \
+        openapitools/openapi-generator-cli:latest \
+        generate \
+        -i /local/slashid-openapi-latest.yaml \
+        -o /local/ \
+        -g python \
+        --additional-properties generateSourceCodeOnly=true \
+        --additional-properties packageName=clients.slashid \
+        --library=asyncio
+
+  generate:
+    desc: Generates required files
+    deps:
+      - generate-slashid-client
+
+  start:
+    desc: Starts the application backend
+    deps:
+      - poetry-install
+      - generate
+      - frontend:build
+    cmds:
+      - poetry run uvicorn --reload suborg_demo:app
