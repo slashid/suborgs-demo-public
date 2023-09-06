@@ -1027,7 +1027,7 @@ When `react-admin` understands the user to be logged out it will present them wi
 
 Create a file `pages/login.tsx` and export a `Login` React component.
 
-In this component you'll implement the `<Form />` component provided by `@slashid/react`. [\<Form />](https://developer.slashid.dev/docs/react-sdk/reference/react-sdk-reference-form) is an uncontrolled React form, and a full featured login page integrated with the SlashID core SDK. You can use this with no modifications necessary.
+In this component you'll implement the `<Form />` component provided by `@slashid/react`. [\<Form />](https://developer.slashid.dev/docs/react-sdk/reference/components/react-sdk-reference-form) is an uncontrolled React form, and a full featured login page integrated with the SlashID core SDK. You can use this with no modifications necessary.
 
 On successful authentication you need to let `react-admin` know that it's safe to continue: you can do this with the `onSuccess` callback and `useLogin` hook from `react-admin`.
 
